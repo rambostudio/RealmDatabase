@@ -14,6 +14,7 @@ import io.realm.annotations.Required;
  */
 
 public class Home extends RealmObject {
+
     @PrimaryKey
     private String id;
 

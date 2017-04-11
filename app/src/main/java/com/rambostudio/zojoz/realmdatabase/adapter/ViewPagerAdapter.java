@@ -5,8 +5,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.rambostudio.zojoz.realmdatabase.fragment.HomeFragment;
+import com.rambostudio.zojoz.realmdatabase.fragment.HomeManagementFragment;
 import com.rambostudio.zojoz.realmdatabase.fragment.PersonFragment;
+import com.rambostudio.zojoz.realmdatabase.fragment.PersonInHomeManagementFragment;
 import com.rambostudio.zojoz.realmdatabase.fragment.PersonManagementFragment;
+import com.rambostudio.zojoz.realmdatabase.model.PersonInHome;
 
 /**
  * Created by rambo on 8/4/2560.
@@ -21,9 +24,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return HomeFragment.newInstance();
+                return PersonInHomeManagementFragment.newInstance();
             case 1:
-                return PersonFragment.newInstance();
+                return HomeManagementFragment.newInstance();
             case 2:
                 return PersonManagementFragment.newInstance();
             default:

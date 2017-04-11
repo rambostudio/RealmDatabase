@@ -14,8 +14,11 @@ import android.widget.Toast;
 
 import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 import com.rambostudio.zojoz.realmdatabase.R;
+import com.rambostudio.zojoz.realmdatabase.adapter.HomeManagementRecyclerViewAdapter;
 import com.rambostudio.zojoz.realmdatabase.adapter.PersonManagementRecyclerViewAdapter;
+import com.rambostudio.zojoz.realmdatabase.manager.HomeManager;
 import com.rambostudio.zojoz.realmdatabase.manager.PersonManager;
+import com.rambostudio.zojoz.realmdatabase.model.Home;
 import com.rambostudio.zojoz.realmdatabase.model.Person;
 import com.rambostudio.zojoz.realmdatabase.util.CollectionIndexUtil;
 
@@ -24,26 +27,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import io.realm.RealmResults;
-
 
 /**
  * Created by nuuneoi on 11/16/2014.
  */
 @SuppressWarnings("unused")
-public class PersonManagementFragment extends Fragment {
+public class HomeManagementFragment extends Fragment {
 
-    List<Person> list;
+    List<Home> list;
     RecyclerView recyclerView;
-    PersonManagementRecyclerViewAdapter recyclerViewAdapter;
-    AppCompatButton btnAddPerson;
-    public PersonManagementFragment() {
+    HomeManagementRecyclerViewAdapter recyclerViewAdapter;
+    AppCompatButton btnAddHome;
+
+    public HomeManagementFragment() {
         super();
     }
 
     @SuppressWarnings("unused")
-    public static PersonManagementFragment newInstance() {
-        PersonManagementFragment fragment = new PersonManagementFragment();
+    public static HomeManagementFragment newInstance() {
+        HomeManagementFragment fragment = new HomeManagementFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -61,38 +63,31 @@ public class PersonManagementFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_person_management, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home_management, container, false);
         initInstances(rootView, savedInstanceState);
         list = new ArrayList<>();
-        list.add(new Person());
+        list.add(new Home());
         list.addAll(getDataFromDatabase());
         if (list.isEmpty()) {
-            initPerson();
+            initHome();
         }
         initRecyclerView();
         return rootView;
     }
 
-    private void initPerson() {
-        PersonManager.getInstance().clearPerson();
-        if (PersonManager.getInstance().clearPerson()) {
-            for (int i = 0; i < 5; i++) {
-                Person person = new Person();
-                person.setId(UUID.randomUUID().toString());
-                person.setName("Person " + i);
-                person.setCreateAt(new Date());
-                PersonManager.getInstance().addPerson(person);
-            }
-        } else {
-            Toast.makeText(Contextor.getInstance().getContext(), "clearPerson Error", Toast.LENGTH_LONG).show();
+    private void initHome() {
+        Toast.makeText(Contextor.getInstance().getContext(), "in initHome ", Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < 5; i++) {
+            Home obj = new Home();
+            obj.setId(UUID.randomUUID().toString());
+            obj.setTitle("Home " + i);
+            obj.setCreateAt(new Date());
+            HomeManager.getInstance().insert(obj);
         }
-
-
-
     }
 
-    private RealmResults<Person> getDataFromDatabase() {
-        return PersonManager.getInstance().getAllPerson();
+    private List<Home> getDataFromDatabase() {
+        return HomeManager.getInstance().getAll();
     }
 
 
@@ -104,10 +99,9 @@ public class PersonManagementFragment extends Fragment {
 //            }
         });
 
-
+//
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerViewAdapter = new PersonManagementRecyclerViewAdapter(list);
-
+        recyclerViewAdapter = new HomeManagementRecyclerViewAdapter(list);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
 
@@ -118,12 +112,20 @@ public class PersonManagementFragment extends Fragment {
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvPersonManagement);
-
-
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvHomeManagement);
+        btnAddHome = (AppCompatButton) rootView.findViewById(R.id.btnAddHome);
 
     }
 
+    private void generateData() {
+        int currentSize = CollectionIndexUtil.getSize(HomeManager.getInstance().getAll());
+        Home obj = new Home();
+        obj.setTitle("Home " + currentSize);
+        obj.setCreateAt(new Date());
+        obj.setId(UUID.randomUUID().toString());
+        HomeManager.getInstance().insert(obj);
+        recyclerViewAdapter.notifyItemInserted(currentSize);
+    }
 
     @Override
     public void onStart() {

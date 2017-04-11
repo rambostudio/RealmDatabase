@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <android.support.v7.widget.CardView
-        android:id="@+id/cvPersonManagementItem"
+        android:id="@+id/cvHomeManagementItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="72dp"
@@ -20,14 +20,14 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_account_circle_black_40dp" />
+                android:src="@drawable/ic_home_black_40dp" />
 
             <TextView
-                android:id="@+id/tvPersonName"
+                android:id="@+id/tvHomeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Mr A\nMr A" />
+                android:text="Home" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

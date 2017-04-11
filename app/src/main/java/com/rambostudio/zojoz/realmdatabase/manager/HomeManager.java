@@ -34,10 +34,7 @@ public class HomeManager implements HomeService {
 
     public HomeManager() {
         mContext = Contextor.getInstance().getContext();
-    }
-
-    public void init() {
-//        realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
     }
 
     public void close() {
@@ -45,7 +42,7 @@ public class HomeManager implements HomeService {
     }
 
     @Override
-    public List<Home> GetAll() {
+    public List<Home> getAll() {
         return realm.where(Home.class).findAll();
     }
 
@@ -55,27 +52,32 @@ public class HomeManager implements HomeService {
     }
 
     @Override
-    public void insert(Home home) {
+    public boolean insert(Home home) {
         realm.beginTransaction();
-
-        Home homeObj = realm.createObject(Home.class);
-        homeObj.setTitle(home.getTitle());
-
-        Person personObj = realm.createObject(Person.class);
-        personObj.setId(UUID.randomUUID().toString());
-        personObj.setName(personObj.getName());
-
-        homeObj.setCreateAt(new Date());
-        realm.commitTransaction();
+        try {
+            Home object = realm.copyToRealm(home);
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public void delete() {
-
+    public boolean delete() {
+        return false;
     }
 
     @Override
-    public void update(Home home) {
-
+    public boolean update(Home home,String title) {
+        realm.beginTransaction();
+        try {
+            home.setTitle(title);
+            realm.copyToRealmOrUpdate(home);
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
     }
 }

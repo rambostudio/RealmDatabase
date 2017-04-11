@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 import com.rambostudio.zojoz.realmdatabase.model.Person;
+import com.rambostudio.zojoz.realmdatabase.viewmodel.AddPersonInHomeViewModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,12 +56,35 @@ public class PersonManager {
     public boolean addPerson(Person person) {
         realm.beginTransaction();
         try {
-            Person object = realm.copyToRealm(person);
+            realm.copyToRealm(person);
             realm.commitTransaction();
         } catch (Exception ex) {
             return false;
         }
         return true;
+    }
+    public boolean update(Person person,String name) {
+        realm.beginTransaction();
+        try {
+            person.setName(name);
+            realm.copyToRealm(person);
+            realm.commitTransaction();
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public List<AddPersonInHomeViewModel> getAddPersonInHome()
+    {
+        mList = realm.where(Person.class).findAll();
+        List<AddPersonInHomeViewModel> resultList = new ArrayList<>();
+        for (int i = 0; i < mList.size(); i++) {
+            AddPersonInHomeViewModel obj = new AddPersonInHomeViewModel();
+            obj.setName(mList.get(i).getName());
+            resultList.add(obj);
+        }
+        return resultList;
     }
 
 }

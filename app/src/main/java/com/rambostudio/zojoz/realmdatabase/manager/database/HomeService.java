@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface HomeService {
 
-    List<Home> GetAll();
+    List<Home> getAll();
 
     Home getById(String id);
 
-    void insert(Home home);
+    boolean insert(Home home);
 
-    void delete();
+    boolean delete();
 
-    void update(Home home);
+    boolean update(Home home,String title);
 }
