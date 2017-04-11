@@ -3,7 +3,6 @@ package com.rambostudio.zojoz.realmdatabase.dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 import com.rambostudio.zojoz.realmdatabase.R;
 import com.rambostudio.zojoz.realmdatabase.adapter.AddPersonInHomeDialogRecyclerViewAdapter;
 import com.rambostudio.zojoz.realmdatabase.manager.PersonManager;
-import com.rambostudio.zojoz.realmdatabase.model.Person;
 import com.rambostudio.zojoz.realmdatabase.viewmodel.AddPersonInHomeViewModel;
 
 import java.util.ArrayList;
@@ -27,12 +25,13 @@ import java.util.List;
  * Created by nuuneoi on 11/16/2014.
  */
 @SuppressWarnings("unused")
-public class DialogFragmentAddPersonInHome extends DialogFragment{
+public class DialogFragmentAddPersonInHome extends DialogFragment {
 
     List<AddPersonInHomeViewModel> mList;
     RecyclerView recyclerView;
-    AddPersonInHomeDialogRecyclerViewAdapter adapter;
-    public DialogFragmentAddPersonInHome() {
+    AddPersonInHomeDialogRecyclerViewAdapter mAdapter;
+
+    public DialogFragmentAddPersonInHome(boolean test) {
         super();
     }
 
@@ -59,7 +58,7 @@ public class DialogFragmentAddPersonInHome extends DialogFragment{
         View rootView = inflater.inflate(R.layout.custom_dialog_add_person_in_home_management, container, false);
         initInstances(rootView, savedInstanceState);
         mList = new ArrayList<>();
-            mList = PersonManager.getInstance().getAddPersonInHome();
+        mList = PersonManager.getInstance().getAddPersonInHome();
         initRecyclerView();
         return rootView;
     }
@@ -67,8 +66,8 @@ public class DialogFragmentAddPersonInHome extends DialogFragment{
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        adapter = new AddPersonInHomeDialogRecyclerViewAdapter(mList);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new AddPersonInHomeDialogRecyclerViewAdapter(mList);
+        recyclerView.setAdapter(mAdapter);
     }
 
     private void init(Bundle savedInstanceState) {
@@ -83,7 +82,15 @@ public class DialogFragmentAddPersonInHome extends DialogFragment{
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String toToast = "";
+                List<AddPersonInHomeViewModel> datas = mAdapter.getCheckedDatas();
+                if (null != datas && !datas.isEmpty()) {
+                    for (AddPersonInHomeViewModel data : datas) {
+                        toToast += data.getName() + "\n";
+                    }
+                }
 
+                Toast.makeText(view.getContext(), toToast, Toast.LENGTH_LONG).show();
             }
         });
     }

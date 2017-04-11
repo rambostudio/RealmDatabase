@@ -22,6 +22,7 @@ import java.util.List;
 
 public class AddPersonInHomeDialogRecyclerViewAdapter extends RecyclerView.Adapter<AddPersonInHomeDialogRecyclerViewAdapter.AddPersonInHomeDialogViewHolder> {
     List<AddPersonInHomeViewModel> mList = new ArrayList<>();
+    private Object checkedDatas;
 
     public AddPersonInHomeDialogRecyclerViewAdapter(List<AddPersonInHomeViewModel> list) {
         this.mList = list;
@@ -45,9 +46,25 @@ public class AddPersonInHomeDialogRecyclerViewAdapter extends RecyclerView.Adapt
         return CollectionIndexUtil.getSize(mList);
     }
 
+    public List<AddPersonInHomeViewModel> getCheckedDatas() {
+        List<AddPersonInHomeViewModel> checkedDatas = new ArrayList<>();
+        for(AddPersonInHomeViewModel data : mList){
+            if(data.isChecked()){
+                checkedDatas.add(data);
+            }
+        }
+        return checkedDatas;
+    }
+
     public class AddPersonInHomeDialogViewHolder extends RecyclerView.ViewHolder {
         AppCompatCheckBox cbAddPersonInHome;
         TextView tvName;
+        private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mList.get(getAdapterPosition()).setChecked(b);
+            }
+        };
         public AddPersonInHomeDialogViewHolder(View itemView) {
             super(itemView);
             initInstances();
@@ -56,19 +73,15 @@ public class AddPersonInHomeDialogRecyclerViewAdapter extends RecyclerView.Adapt
         private void initInstances() {
             tvName = (TextView) itemView.findViewById(R.id.tvPersonName);
             cbAddPersonInHome = (AppCompatCheckBox) itemView.findViewById(R.id.cbAddPersonInHome);
-            cbAddPersonInHome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    mList.get(getAdapterPosition()).setChecked(b);
-                }
-            });
+            cbAddPersonInHome.setOnCheckedChangeListener(mOnCheckedChangeListener);
         }
 
         public void bindData(AddPersonInHomeViewModel obj) {
             if (obj != null) {
                 tvName.setText(obj.getName());
+                cbAddPersonInHome.setOnCheckedChangeListener(null);
                 cbAddPersonInHome.setChecked(obj.isChecked());
-
+                cbAddPersonInHome.setOnCheckedChangeListener(mOnCheckedChangeListener);
             }
         }
     }

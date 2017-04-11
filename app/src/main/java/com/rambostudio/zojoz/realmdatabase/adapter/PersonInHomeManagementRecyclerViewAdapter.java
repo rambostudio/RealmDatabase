@@ -73,9 +73,9 @@ public class PersonInHomeManagementRecyclerViewAdapter extends RecyclerView.Adap
 
             tvHomeTitle = (TextView) itemView.findViewById(R.id.tvHomeTitle);
             btnAddPersonInInHome = (AppCompatButton) itemView.findViewById(R.id.btnAddPersonInInHome);
-            btnAddPersonInInHome.setOnLongClickListener(new View.OnLongClickListener() {
+            btnAddPersonInInHome.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
+                public void onClick(View view) {
 
 //                    final Dialog dialog = new Dialog(itemView.getContext());
 //                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -98,7 +98,7 @@ public class PersonInHomeManagementRecyclerViewAdapter extends RecyclerView.Adap
 
                     showDialog();
 
-                    return true;
+
                 }
 
 
@@ -107,9 +107,10 @@ public class PersonInHomeManagementRecyclerViewAdapter extends RecyclerView.Adap
 
         private void showDialog() {
 
-            FragmentManager manager = ((Activity)mContext).getFragmentManager();
-            DialogFragmentAddPersonInHome dialog = new DialogFragmentAddPersonInHome();
-            dialog.show(manager,"DialogFragmentAddPersonInHome");
+//            FragmentManager manager = ((Activity)mContext).getFragmentManager();
+//            DialogFragmentAddPersonInHome dialog = new DialogFragmentAddPersonInHome();
+//            dialog.show(manager,"DialogFragmentAddPersonInHome");
+            DialogFragmentAddPersonInHome.newInstance().show(((Activity)mContext).getFragmentManager(),"DialogFragmentAddPersonInHome");
 
         }
         private void updateHome(Home home, String title) {
